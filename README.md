@@ -9,7 +9,7 @@ Kyrin enables:
   - Automatic loading of routes by simple declarations.
   - Typescript support in Node enabling easier maintenance, support for latest standards, code portability and type checks!
 
-> The framework is still in development, and uses ejs templates for views (for now), you can freely suggest and contribute to the code, or you can send an [email] or tweet me [@ravisemwal94].
+> The framework is still in development, and uses ejs templates for views (for now), you can freely suggest and contribute to the code, or you can send an [email] or tweet me [@ravisemwal_].
 
 
 ### What powers Kyrin
@@ -71,4 +71,4 @@ This program is licensed under MIT license.
 
    [express]: <http://expressjs.com>
 
-   [@ravisemwal94]: <https://twitter.com/ravisemwal_>
+   [@ravisemwal_]: <https://twitter.com/ravisemwal_>
