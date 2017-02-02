@@ -5,7 +5,7 @@ Kyrin enables:
   - Centralized YML based configuration for node applications.
   - Structured express set up.
   - Kyrin container, gives access to all application services.
-  - Automatic initialisation of express middleware.
+  - Automatic initialization of express middleware.
   - Automatic loading of routes by simple declarations.
   - Typescript support in Node enabling easier maintenance, support for latest standards, code portability and type checks!
 
