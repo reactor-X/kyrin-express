@@ -54,7 +54,6 @@ Kyrin-Express bundles these open source middlwares with it along with their type
  - Integrate mongoose in services.
  - More configuration options
  - Rethink Kyrin's internal code structuring.
- - Add Night Mode
 
 License
 ----
