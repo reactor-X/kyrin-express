@@ -24,8 +24,6 @@ Kyrin-Express uses a number of open source projects to work properly:
 
 Kyrin-Express requires [Node.js](https://nodejs.org/) v6+ to run.
 
-Download and extract the [latest pre-built release](https://github.com/joemccann/dillinger/releases).
-
 Install the dependencies, devDependencies, compile typescript and start the server.
 
 ```sh
@@ -67,7 +65,7 @@ This program is licensed under MIT license.
 
 
    [email]: <mailto:ravisemwal@outlook.com>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
+   [git-repo-url]: <https://github.com/nodejs/node>
    [TypeScript]: <https://www.typescriptlang.org/>
    [node.js]: <http://nodejs.org>
 
