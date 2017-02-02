@@ -1,0 +1,7 @@
+/*
+
+Keep your schemas here. Schemas are the direct mappers between the datastore and objects within the app.
+
+You can expose individually or bootstrap them to provide the entire model to the app.
+
+*/

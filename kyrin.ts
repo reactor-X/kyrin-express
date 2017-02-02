@@ -1,0 +1,57 @@
+import * as express from "express";
+import * as helmet from "helmet";
+import * as bodyParser  from "body-parser";
+import * as expressSession from "express-session";
+import * as path from "path";
+import * as fs from "fs";
+import KyrinEngine from "./.kyrin/KyrinEngine";
+
+let app = express();
+
+// Initialise express specific settings here.
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.engine('html', require('ejs').renderFile);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('env','production');    
+
+//Initialise kyrin.
+KyrinEngine.boot(app,"dev");
+export default app.get('container');
+
+//Test the container with a hello world message
+console.log("Developer: "+ app.get('container').getParameter('developer'));
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err;
+    err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+export var kyrinApp=app;
+//# sourceMappingURL=app.js.map

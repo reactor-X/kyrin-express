@@ -1,0 +1,13 @@
+#Add service names here.
+
+#Declaration format :
+
+# demo:
+#     class: Path-Relative-To-Services-Directory
+
+# chainload:    #This directive enables you to load from controller specific services directory.
+#     FeatureName: Path-Relative-To-"controllers"-Directory    
+
+say-hello:
+    class: Demo/demo
+    
