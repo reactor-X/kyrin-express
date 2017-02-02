@@ -15,7 +15,6 @@ app.engine('html', require('ejs').renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('env','production');    
 
 //Initialise kyrin.
 KyrinEngine.boot(app,"dev");
