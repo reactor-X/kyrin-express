@@ -60,7 +60,7 @@ Kyrin-Express bundles these open source middlwares with it along with their type
 
 License
 ----
-This program is licensed under GPLv2.
+This program is licensed under MIT license.
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
