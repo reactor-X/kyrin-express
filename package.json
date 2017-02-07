@@ -4,7 +4,9 @@
   "description": "Develop node Express apps in typescript.",
   "main": "kyrin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "pm2 start kyrin-ecosystem.config.json",
+    "build": "tsc",
+    "stop": "pm2 kill"
   },
   "author": "Ravi Semwal",
   "license": "GPL-2.0",
@@ -37,6 +39,7 @@
     "js-yaml": "^3.7.0",
     "mongoose": "^4.7.7",
     "passport": "^0.3.2",
+    "pm2": "^2.4.0",
     "serve-favicon": "^2.3.2",
     "socket.io": "^1.7.2"
   }

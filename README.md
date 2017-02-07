@@ -29,9 +29,9 @@ Install the dependencies, devDependencies, compile typescript and start the serv
 ```sh
 $ cd kyrin-express
 $ npm install -g typescript
-$ npm install 
-$ tsc
-$ node boot/www.js
+$ npm install
+$ npm build
+$ npm start
 ```
 
 

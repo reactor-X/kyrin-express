@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Initialise kyrin.
-KyrinEngine.boot(app,"dev");
+KyrinEngine.boot(app,app.get('env')=="development"?"dev":"prod");
 export default app.get('container');
 
 //Test the container with a hello world message

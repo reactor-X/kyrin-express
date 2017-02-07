@@ -1,0 +1,27 @@
+application:
+    path_bindings: #Relative to server directory (Names are for informative purpose, binding pattern ['aliaspath','path-wrt-server']).
+            binaries: ['/lib','node_modules']
+            styles: ['/css','public/assets/css']
+            javascripts: ['/js','public/assets/js']
+
+middlewares:    #Still in alpha, supports express-session and similar initialization patterns. These are bootstrapped in order.
+
+    helmet:
+        use_default: true
+    
+    express-session:
+        init_params:
+            secret: i!gP&3ibF}Qx<)+V(ZiY$&nXY)R&AUj@dQEz47M?<FU[&21jtL[GQ.Kzm-.n%=C
+            resave: true
+            saveUninitialized: true
+        use_default: false
+
+    
+    
+    # middleware_name:
+    #     config_params:
+    #         param_1: cache
+    #         param_2: [el1, el2]          
+    #         param_3: [el1, el2]
+    #     use_default : true/false (Initialise with/without config params.)        
+       
