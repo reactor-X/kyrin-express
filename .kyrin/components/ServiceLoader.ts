@@ -34,7 +34,7 @@ export class ServiceLoader{
 
     private loadServices(){
        for(let serviceKey in this.servicePrimitives){
-           this.services[serviceKey]=require(path.join(__dirname,"../../services/"+this.servicePrimitives[serviceKey].class));
+           this.services[serviceKey]=require(path.join(__dirname,"../../src/services/"+this.servicePrimitives[serviceKey].class));
        }
     }
 }

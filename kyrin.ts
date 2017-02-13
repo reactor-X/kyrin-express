@@ -10,7 +10,7 @@ let app = express();
 
 // Initialise express specific settings here.
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/views'));
 app.engine('html', require('ejs').renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,9 +19,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Initialise kyrin.
 KyrinEngine.boot(app,app.get('env')=="development"?"dev":"prod");
 export default app.get('container');
-
-//Test the container with a hello world message
-console.log("Developer: "+ app.get('container').getParameter('developer'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -11,7 +11,7 @@ export default class KyrinRouter{
         try {
             let routeSpecs=yamlEngine.safeLoad(fs.readFileSync(path.join(__dirname,"../../config/routing.yml"), 'utf8'));
             for(let route in routeSpecs){
-                app.use(routeSpecs[route]['entry-point'],require(path.join(__dirname,"../../controllers/"+routeSpecs[route]['controller'])));
+                app.use(routeSpecs[route]['entry-point'],require(path.join(__dirname,"../../src/controllers/"+routeSpecs[route]['controller'])));
             }
             
         }catch (e){
