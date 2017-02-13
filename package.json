@@ -1,7 +1,7 @@
 {
   "name": "kyrin",
   "version": "0.0.1",
-  "description": "Develop MEAN 2.0 apps in typescript.",
+  "description": "Develop node Express apps in typescript.",
   "main": "kyrin.js",
   "scripts": {
     "start": "pm2 start env/kyrin-ecosystem.config.json",
