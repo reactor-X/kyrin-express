@@ -6,6 +6,7 @@
         "node_modules":true,
         "*.js":true,
         "src/**/*.js":true,
-        "boot/**/*.js":true
+        "boot/**/*.js":true,
+         ".kyrin/**/*.js":true
     }
 }
