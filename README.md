@@ -30,7 +30,7 @@ Install the dependencies, devDependencies, compile typescript and start the serv
 $ cd kyrin-express
 $ npm install -g typescript
 $ npm install
-$ npm build
+$ npm run build
 $ npm start
 ```
 
