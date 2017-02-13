@@ -1,8 +1,8 @@
 
-import KyrinContainer from "./components/ContainerLoader";
-import KyrinRouter from "./components/KyrinRouter";
-import PathAliasBinder from "./components/PathAliasBinder";
-import MiddlewareLoader from "./components/MiddlewareLoader";
+import KyrinContainer from "./Core/ContainerLoader";
+import KyrinRouter from "./Core/KyrinRouter";
+import PathAliasBinder from "./Core/PathAliasBinder";
+import MiddlewareLoader from "./Core/MiddlewareLoader";
 export default class KyrinEngine{
     public static boot(app,mode :string){
         if (mode!='dev' && mode!='prod'){
