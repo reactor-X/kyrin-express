@@ -5,6 +5,7 @@
         "**/.DS_Store": true,
         "node_modules":true,
         "*.js":true,
-        "src/**/*.js":true
+        "src/**/*.js":true,
+        "boot/**/*.js":true
     }
 }
