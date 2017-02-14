@@ -10,5 +10,10 @@
     },
     "exclude": [
     		"node_modules"
-	       ]
+	       ],
+           "include": [
+               ".kyrin/**/*.ts",
+               "src/**/*.ts",
+               "boot/**/*.ts"
+           ]
 }

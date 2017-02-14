@@ -1,12 +1,13 @@
 import * as yamlEngine from "js-yaml";
 import * as fs from "fs";
 import * as path from "path";
+import KLogger from "../Logging/KLogger";
 /*
 * This class is responsible for parsing routing.yml file to initialise routes for the app.
 *
 */
 export default class KyrinRouter{
-    public static generateRoutes(app,serverDirectory :string){
+    public static generateRoutes(app,serverDirectory :string,logger :KLogger){
         try {
             let routeSpecs=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/routing.yml"), 'utf8'));
             for(let route in routeSpecs){
@@ -14,7 +15,9 @@ export default class KyrinRouter{
             }
             
         }catch (e){
-            throw Error("Error parsing route definition from "+path.join(serverDirectory,"config/routing.yml")+". Please make sure file exists and is syntactically correct.");
+            logger.kErr("Error parsing route definition from "+path.join(serverDirectory,"config/routing.yml")+". Please make sure file exists and is syntactically correct.");
+            logger.kInfo("Terminating app due to error");
+            process.exit();
         }
     }
 }

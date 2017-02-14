@@ -1,6 +1,7 @@
 import * as yamlEngine from "js-yaml";
 import * as fs from "fs";
 import * as path from "path";
+import KLogger from "../Logging/KLogger";
 /*
 * This class is responsible for parsing services.yml file to generate service objects for the container.
 * Environment mode is passed to the constructor and can be used to perform mode specific actions on demand.
@@ -10,7 +11,9 @@ import * as path from "path";
 export class ServiceLoader{
     private services;
     private servicePrimitives;
-    constructor(){
+    private static logger :KLogger;
+    constructor(logger :KLogger){
+        ServiceLoader.logger=logger;
         this.services=[];
         this.servicePrimitives=[];
     }
@@ -24,13 +27,20 @@ export class ServiceLoader{
         try {
             this.servicePrimitives=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/services.yml"), 'utf8'));
         }catch (e){
-            throw Error("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
+            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
         }
     }
 
     private loadServices(serverDirectory :string){
-       for(let serviceKey in this.servicePrimitives){
-           this.services[serviceKey]=require(path.join(serverDirectory,"src/services/"+this.servicePrimitives[serviceKey].class));
-       }
+    try{
+            for(let serviceKey in this.servicePrimitives){
+                this.services[serviceKey]=require(path.join(serverDirectory,"src/services/"+this.servicePrimitives[serviceKey].class));
+            }
+        }
+        catch(ex){
+            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
+            ServiceLoader.logger.kInfo("Terminating app due to error");
+            process.exit();
+        }
     }
 }

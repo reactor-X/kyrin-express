@@ -2,12 +2,16 @@ import * as yamlEngine from "js-yaml";
 import * as fs from "fs";
 import * as path from "path";
 import {ServiceLoader} from "./ServiceLoader";
+import KLogger from "../Logging/KLogger";
+
 export default class AppContainer{
     private params;
     private config;
     private services;
-
+    private logger :KLogger;
     constructor(mode :string,serverDirectory :string){
+        this.logger=new KLogger(mode,serverDirectory,null);
+        this.logger.kInfo("Initializing kyrin...");
         this.loadConfigAndParams(mode,serverDirectory);
         this.loadServices(serverDirectory);
     }
@@ -18,12 +22,16 @@ export default class AppContainer{
             this.params=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/parameters.yml"), 'utf8'));
             this.config['application']['env']=mode;
         }catch (e){
-            throw Error("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
+
+        console.log(e);
+           this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
+           this.logger.kInfo("Terminating app due to error");
+           process.exit();
         }
     }
 
     private loadServices(serverDirectory :string){
-            this.services=new ServiceLoader().getServices(serverDirectory);
+            this.services=new ServiceLoader(this.logger).getServices(serverDirectory);
     }
     public getConfig(key :string) :any{
 
@@ -43,6 +51,9 @@ export default class AppContainer{
         else return null;
     }
 
+    public getLogger(){
+        return this.logger;
+    }
     public get(name :string){
         if (typeof (this.services[name]) !== 'undefined'){
             return this.services[name];
