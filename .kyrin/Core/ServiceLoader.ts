@@ -10,31 +10,27 @@ import * as path from "path";
 export class ServiceLoader{
     private services;
     private servicePrimitives;
-    private log :boolean;
-    constructor(mode :string){
+    constructor(){
         this.services=[];
         this.servicePrimitives=[];
-        if (mode=='dev'){
-            this.log=true;
-        }
     }
-    public getServices(){
-        this.parsePrimitives();
-        this.loadServices();
+    public getServices(serverDirectory :string){
+        this.parsePrimitives(serverDirectory);
+        this.loadServices(serverDirectory);
         return this.services;
     }
 
-    private parsePrimitives(){
+    private parsePrimitives(serverDirectory :string){
         try {
-            this.servicePrimitives=yamlEngine.safeLoad(fs.readFileSync(path.join(__dirname,"../../config/services.yml"), 'utf8'));
+            this.servicePrimitives=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/services.yml"), 'utf8'));
         }catch (e){
-            throw Error("Error parsing service definitions from "+path.join(__dirname,"../../config/services.yml")+". Please make sure file exists and is syntactically correct.");
+            throw Error("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
         }
     }
 
-    private loadServices(){
+    private loadServices(serverDirectory :string){
        for(let serviceKey in this.servicePrimitives){
-           this.services[serviceKey]=require(path.join(__dirname,"../../src/services/"+this.servicePrimitives[serviceKey].class));
+           this.services[serviceKey]=require(path.join(serverDirectory,"src/services/"+this.servicePrimitives[serviceKey].class));
        }
     }
 }

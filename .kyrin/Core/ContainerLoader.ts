@@ -7,23 +7,23 @@ export default class AppContainer{
     private config;
     private services;
 
-    constructor(mode :string){
-        this.loadConfigAndParams(mode);
-        this.loadServices(mode);
+    constructor(mode :string,serverDirectory :string){
+        this.loadConfigAndParams(mode,serverDirectory);
+        this.loadServices(serverDirectory);
     }
 
-    private loadConfigAndParams(mode :string){
+    private loadConfigAndParams(mode :string,serverDirectory :string){
         try {
-            this.config=yamlEngine.safeLoad(fs.readFileSync(path.join(__dirname,"../../config/config-"+mode+".yml"), 'utf8'));
-            this.params=yamlEngine.safeLoad(fs.readFileSync(path.join(__dirname,"../../config/parameters.yml"), 'utf8'));
+            this.config=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/config-"+mode+".yml"), 'utf8'));
+            this.params=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/parameters.yml"), 'utf8'));
             this.config['application']['env']=mode;
         }catch (e){
             throw Error("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
         }
     }
 
-    private loadServices(mode :string){
-            this.services=new ServiceLoader(mode).getServices();
+    private loadServices(serverDirectory :string){
+            this.services=new ServiceLoader().getServices(serverDirectory);
     }
     public getConfig(key :string) :any{
 

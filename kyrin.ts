@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Initialise kyrin.
-KyrinEngine.boot(app,app.get('env')=="development"?"dev":"prod");
+KyrinEngine.boot(app,app.get('env')=="development"?"dev":"prod",__dirname);
 export default app.get('container');
 
 // catch 404 and forward to error handler

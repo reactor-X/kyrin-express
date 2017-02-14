@@ -5,17 +5,16 @@ import * as path from "path";
 * This class is responsible for parsing routing.yml file to initialise routes for the app.
 *
 */
-
 export default class KyrinRouter{
-    public static generateRoutes(app){
+    public static generateRoutes(app,serverDirectory :string){
         try {
-            let routeSpecs=yamlEngine.safeLoad(fs.readFileSync(path.join(__dirname,"../../config/routing.yml"), 'utf8'));
+            let routeSpecs=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/routing.yml"), 'utf8'));
             for(let route in routeSpecs){
-                app.use(routeSpecs[route]['entry-point'],require(path.join(__dirname,"../../src/controllers/"+routeSpecs[route]['controller'])));
+                app.use(routeSpecs[route]['entry-point'],require(path.join(serverDirectory,"src/controllers/"+routeSpecs[route]['controller'])));
             }
             
         }catch (e){
-            throw Error("Error parsing route definition from "+path.join(__dirname,"../../config/routing.yml")+". Please make sure file exists and is syntactically correct.");
+            throw Error("Error parsing route definition from "+path.join(serverDirectory,"config/routing.yml")+". Please make sure file exists and is syntactically correct.");
         }
     }
 }

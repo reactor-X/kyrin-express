@@ -9,11 +9,11 @@ import * as express from "express";
 *
 */
 export default class PathAliasBinder{
-    public static bindAccessPaths(app){
+    public static bindAccessPaths(app,serverDirectory :string){
         try{
             const pathBindings=app.get('container').getConfig('application')['path_bindings'];
             for (let pathAlias in pathBindings){
-                app.use(pathBindings[pathAlias][0], express.static(path.join(__dirname,"../../"+pathBindings[pathAlias][1])));
+                app.use(pathBindings[pathAlias][0], express.static(path.join(serverDirectory,pathBindings[pathAlias][1])));
             }
         }catch(e){
             if (typeof app.get('container').getConfig('application')['path_bindings'] !=='undefined'){
