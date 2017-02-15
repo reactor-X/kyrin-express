@@ -2,6 +2,7 @@ import * as yamlEngine from "js-yaml";
 import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
+import KLogger from "../Logging/KLogger";
 
 /*
 *   PathAliasBinder reads static path configuration from config.yml and initializes them for the express app instance.
@@ -9,15 +10,17 @@ import * as express from "express";
 *
 */
 export default class PathAliasBinder{
-    public static bindAccessPaths(app){
+    public static bindAccessPaths(app,serverDirectory :string , logger :KLogger){
         try{
             const pathBindings=app.get('container').getConfig('application')['path_bindings'];
             for (let pathAlias in pathBindings){
-                app.use(pathBindings[pathAlias][0], express.static(path.join(__dirname,"../../"+pathBindings[pathAlias][1])));
+                app.use(pathBindings[pathAlias][0], express.static(path.join(serverDirectory,pathBindings[pathAlias][1])));
             }
         }catch(e){
             if (typeof app.get('container').getConfig('application')['path_bindings'] !=='undefined'){
-                throw Error('Unable to parse path bindings in configuration. Please, check declaration format.');
+                logger.kErr('Unable to parse path bindings in configuration. Please, check declaration format.');
+                logger.kInfo("Terminating app due to error");
+                process.exit();
             }
         }
     }
