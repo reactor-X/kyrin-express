@@ -11,7 +11,7 @@ export default class KyrinEngine{
         }
         else {
             app.set('container',new KyrinContainer(mode,serverDirectory));
-            MiddlewareLoader.attachMiddlewares(app);
+            MiddlewareLoader.attachMiddlewares(app,app.get('container').getLogger());
             KyrinRouter.generateRoutes(app,serverDirectory,app.get('container').getLogger());
             PathAliasBinder.bindAccessPaths(app,serverDirectory,app.get('container').getLogger());
             app.get('container').getLogger().kInfo("Kyrin ready..");

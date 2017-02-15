@@ -50,14 +50,14 @@ export default class AppContainer{
         }
         else return null;
     }
-
-    public getLogger(){
-        return this.logger;
-    }
     public get(name :string){
         if (typeof (this.services[name]) !== 'undefined'){
             return this.services[name];
         }
         else throw Error("That service doesn't exist yet. Check with services.yml or reboot the node server if you made a change to service declarations.");
+    }
+
+    public getLogger(){
+        return this.logger;
     }
 }

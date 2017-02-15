@@ -3,7 +3,6 @@
     "script"    : "boot/www.js",
     "instances" : "max",
     "exec_mode" : "cluster",
-    "watch" : true,
     "env": {
       "NODE_ENV": "development"
     }
