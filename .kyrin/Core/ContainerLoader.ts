@@ -60,4 +60,8 @@ export default class AppContainer{
     public getLogger(){
         return this.logger;
     }
+
+    public getWinstonInstance(){
+        return this.logger.getLogger();
+    }
 }
