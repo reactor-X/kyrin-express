@@ -1,16 +1,17 @@
 import * as fs from "fs";
 import * as path from "path";
+import KLogger from "../Logging/KLogger";
 /*
 *   Still an alpha feature.
 *   Supports express session.    
 *
 */
 export default class MiddlewareLoader{
-    public static attachMiddlewares(app){
+    public static attachMiddlewares(app,logger :KLogger){
         try {
             let middlewares=app.get('container').getConfig('middlewares');
             for (let middleware in middlewares){
-                console.log("Initialising "+middleware);
+                logger.kInfo("Initialising "+middleware);
                 if (middlewares[middleware]['use_default']==true){
                     app.use(require(middleware)());
                 }
@@ -20,7 +21,9 @@ export default class MiddlewareLoader{
             }
         }catch (e){
             console.log(e);
-            throw Error("Error parsing middleware declarations from "+path.join(__dirname,"../../config/config-"+app.get('container').getConfig('application')['env']+".yml")+". Please make sure file exists and is syntactically correct.");
+            logger.kErr("Error parsing middleware declarations from "+path.join(__dirname,"../../config/config-"+app.get('container').getConfig('application')['env']+".yml")+". Please make sure file exists and is syntactically correct.");
+            logger.kInfo("Terminating app due to error");
+            process.exit();
         }
     }
 }
