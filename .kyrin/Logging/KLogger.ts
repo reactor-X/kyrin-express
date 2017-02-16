@@ -1,10 +1,11 @@
-import * as winston  from "winston";
+import * as bunyan  from "bunyan";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
 import * as process from "process";
 export default class KLogger{
     
     private kyrin_logger;
+    private network_logger;
     private static logPath ;
     constructor(mode :string, serverDirectory :string,customDirectory :string){
         this.prepareLogDirectory(mode,serverDirectory,customDirectory);
@@ -12,40 +13,34 @@ export default class KLogger{
     }
 
     private initLogger(){
-    this.kyrin_logger=new winston.Logger({
-                                    transports: [
-                                                     new (winston.transports.File)({
-                                                        name: 'kyrin_error_file',
-                                                        maxsize: 10000000,  //Log files of max 10 MB
-                                                        tailable:true,
-                                                        filename: path.join(KLogger.logPath,'error.log'),
-                                                        level: 'error'
-                                                     }),
-                                                     new (winston.transports.File)({
-                                                        name: 'kyrin_info_file',
-                                                        maxsize: 10000000,  //Log files of max 10 MB
-                                                        tailable:true,
-                                                        filename: path.join(KLogger.logPath,'info.log'),
-                                                        level: 'info'
-                                                     }),
-                                                        
-                                                     new (winston.transports.File)({
-                                                        name: 'kyrin_blockchain',
-                                                        maxsize: 80000000, //Log files of max 80 MB
-                                                        tailable:true,
-                                                        filename: path.join(KLogger.logPath,'blockchain.log'),
-                                                        level: 'warn'
-                                                     })
-                                                ]
-        }); 
+    this.kyrin_logger=bunyan.createLogger({
+                                            name: "system",
+                                            streams: [
+                                                        {   type: "rotating-file",
+                                                            path: path.join(KLogger.logPath,"info.log"),
+                                                            level: "info",
+                                                            period: "1d",   // daily rotation 
+                                                        }
+                                                    ]
+                                        });
+    this.network_logger=bunyan.createLogger({
+                                            name: "network",
+                                            streams: [
+                                                        {   type: "rotating-file",
+                                                            path: path.join(KLogger.logPath,"network.log"),
+                                                            level: "info",
+                                                            period: "1d",   // daily rotation 
+                                                        }
+                                                    ]
+                                        });
     }
 
-    public kErr(message){ //Log errors
-        this.kyrin_logger.error(message,{'node':process.pid});
+    public kErr(message,error=null){ //Log errors
+        error==null?this.kyrin_logger.error(message):this.kyrin_logger.error({err: error}, message);
     }
 
     public kInfo(message){ //Log info
-        this.kyrin_logger.info(message,{'node':process.pid});
+        this.kyrin_logger.info(message);
     }
     private prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
         KLogger.logPath=customDirectory==null?path.join(serverDirectory,"var/log/"+mode):path.join(customDirectory,mode);
@@ -59,6 +54,10 @@ export default class KLogger{
 
     public getLogger(){
         return this.kyrin_logger;
+    }
+
+    public getNetworkLogger(){
+        return this.network_logger;
     }
 
 }

@@ -18,7 +18,7 @@ export default class PathAliasBinder{
             }
         }catch(e){
             if (typeof app.get('container').getConfig('application')['path_bindings'] !=='undefined'){
-                logger.kErr('Unable to parse path bindings in configuration. Please, check declaration format.');
+                logger.kErr('Unable to parse path bindings in configuration. Please, check declaration format.',e);
                 logger.kInfo("Terminating app due to error");
                 process.exit();
             }

@@ -24,7 +24,7 @@ export default class AppContainer{
         }catch (e){
 
         console.log(e);
-           this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
+           this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message,e);
            this.logger.kInfo("Terminating app due to error");
            process.exit();
         }
@@ -61,7 +61,7 @@ export default class AppContainer{
         return this.logger;
     }
 
-    public getWinstonInstance(){
-        return this.logger.getLogger();
+    public getExpressLogger(){
+        return this.logger.getNetworkLogger();
     }
 }
