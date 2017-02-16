@@ -27,7 +27,7 @@ export class ServiceLoader{
         try {
             this.servicePrimitives=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/services.yml"), 'utf8'));
         }catch (e){
-            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
+            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.",e);
         }
     }
 
@@ -38,7 +38,7 @@ export class ServiceLoader{
             }
         }
         catch(ex){
-            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.");
+            ServiceLoader.logger.kErr("Error parsing service definitions from "+path.join(serverDirectory,"config/services.yml")+". Please make sure file exists and is syntactically correct.",ex);
             ServiceLoader.logger.kInfo("Terminating app due to error");
             process.exit();
         }
