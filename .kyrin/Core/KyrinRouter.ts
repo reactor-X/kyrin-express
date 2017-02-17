@@ -17,7 +17,7 @@ export default class KyrinRouter{
         }catch (e){
             logger.kErr("Error parsing route definition from "+path.join(serverDirectory,"config/routing.yml")+". Please make sure file exists and is syntactically correct.",e);
             logger.kInfo("Terminating app due to error");
-            process.exit();
+            throw Error("Error parsing route definition from "+path.join(serverDirectory,"config/routing.yml")+". Please make sure file exists and is syntactically correct.")
         }
     }
 }
