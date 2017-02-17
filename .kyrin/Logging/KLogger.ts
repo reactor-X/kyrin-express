@@ -17,7 +17,7 @@ export default class KLogger{
                                             name: "system",
                                             streams: [
                                                         {   type: "rotating-file",
-                                                            path: path.join(KLogger.logPath,"info.log"),
+                                                            path: path.join(KLogger.logPath,"app.log"),
                                                             level: "info",
                                                             period: "1d",   // daily rotation 
                                                         }
@@ -37,6 +37,10 @@ export default class KLogger{
 
     public kErr(message,error=null){ //Log errors
         error==null?this.kyrin_logger.error(message):this.kyrin_logger.error({err: error}, message);
+    }
+
+    public Eerr(expressData,error){
+        this.kyrin_logger.error(expressData, error.stack);
     }
 
     public kInfo(message){ //Log info

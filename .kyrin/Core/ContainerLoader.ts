@@ -61,7 +61,7 @@ export default class AppContainer{
         return this.logger;
     }
 
-    public getExpressLogger(){
+    public getNetworkLogger(){
         return this.logger.getNetworkLogger();
     }
 }
