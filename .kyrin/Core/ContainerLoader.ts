@@ -24,7 +24,7 @@ export default class AppContainer{
         }catch (e){
            this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message,e);
            this.logger.kInfo("Terminating app due to error");
-           process.exit();
+           throw Error("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
         }
     }
 
