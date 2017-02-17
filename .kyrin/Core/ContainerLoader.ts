@@ -22,8 +22,6 @@ export default class AppContainer{
             this.params=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/parameters.yml"), 'utf8'));
             this.config['application']['env']=mode;
         }catch (e){
-
-        console.log(e);
            this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message,e);
            this.logger.kInfo("Terminating app due to error");
            process.exit();
