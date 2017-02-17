@@ -3,6 +3,8 @@
     "script"    : "boot/www.js",
     "instances" : "max",
     "exec_mode" : "cluster",
+    "watch":true,
+    "ignore_watch": ["node_modules", "public", "var",".kyrin", "src/views", "package.json"],
     "env": {
       "NODE_ENV": "development"
     }

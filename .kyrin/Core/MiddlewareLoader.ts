@@ -20,10 +20,9 @@ export default class MiddlewareLoader{
                 }
             }
         }catch (e){
-            console.log(e);
-            logger.kErr("Error parsing middleware declarations from "+path.join(__dirname,"../../config/config-"+app.get('container').getConfig('application')['env']+".yml")+". Please make sure file exists and is syntactically correct.");
+            logger.kErr("Error parsing middleware declarations from "+path.join(__dirname,"../../config/config-"+app.get('container').getConfig('application')['env']+".yml")+". Please make sure file exists and is syntactically correct.",e);
             logger.kInfo("Terminating app due to error");
-            process.exit();
+            throw Error("Error parsing middleware declarations from "+path.join(__dirname,"../../config/config-"+app.get('container').getConfig('application')['env']+".yml")+". Please make sure file exists and is syntactically correct.");
         }
     }
 }
