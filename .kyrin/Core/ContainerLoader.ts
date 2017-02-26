@@ -10,9 +10,12 @@ export default class AppContainer{
     private services;
     private logger :KLogger;
     constructor(mode :string,serverDirectory :string){
-        this.logger=new KLogger(mode,serverDirectory,null);
-        this.logger.kInfo("Initializing kyrin...");
         this.loadConfigAndParams(mode,serverDirectory);
+        if(typeof (this.getConfig('application')['logger'])!== 'undefined')
+            this.logger=new KLogger(mode,serverDirectory,this.getConfig('application')['logger']);
+        else
+            this.logger=new KLogger(mode,serverDirectory,null);
+        this.logger.kInfo("Initializing kyrin...");
         this.loadServices(serverDirectory);
     }
 

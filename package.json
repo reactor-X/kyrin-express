@@ -37,6 +37,7 @@
   "dependencies": {
     "body-parser": "^1.16.0",
     "bunyan": "^1.8.5",
+    "bunyan-logstash-tcp": "^0.3.5",
     "bunyan-middleware": "^0.6.0",
     "core-js": "^2.4.1",
     "ejs": "^2.5.5",

@@ -2,12 +2,19 @@ import * as bunyan  from "bunyan";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
 import * as process from "process";
+
 export default class KLogger{
     
     private kyrin_logger;
     private network_logger;
     private static logPath ;
+    private static logType;
+    private static logDepth;
     constructor(mode :string, serverDirectory :string,customDirectory :string){
+        if (mode=='dev')
+            KLogger.logDepth='trace';
+        else
+            KLogger.logDepth='info'
         this.prepareLogDirectory(mode,serverDirectory,customDirectory);
         this.initLogger();
     }
@@ -18,7 +25,7 @@ export default class KLogger{
                                             streams: [
                                                         {   type: "rotating-file",
                                                             path: path.join(KLogger.logPath,"app.log"),
-                                                            level: "info",
+                                                            level: KLogger.logDepth,
                                                             period: "1d",   // daily rotation 
                                                         }
                                                     ]
@@ -35,7 +42,8 @@ export default class KLogger{
                                         });
     }
 
-    public kErr(message,error=null){ //Log errors
+    public kErr(message,error=null){ 
+        //Log errors
         error==null?this.kyrin_logger.error(message):this.kyrin_logger.error({err: error}, message);
     }
 
@@ -46,7 +54,7 @@ export default class KLogger{
     public kInfo(message){ //Log info
         this.kyrin_logger.info(message);
     }
-    private prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
+    private static prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
         KLogger.logPath=customDirectory==null?path.join(serverDirectory,"var/log/"+mode):path.join(customDirectory,mode);
         mkdirp(KLogger.logPath, function(err) { 
             if (err){
@@ -54,6 +62,24 @@ export default class KLogger{
             }
            
         });
+    }
+
+    private static configure(mode :string,serverDirectory :string,config ){
+        if ((typeof config)==='undefined' || config===null)
+            KLogger.prepareLogDirectory(mode,serverDirectory,null); 
+        else{
+                try{
+                    if (config.mode=='file'){
+                        KLogger.prepareLogDirectory(mode,null,config.path);
+                    }
+                    else if (config.mode=='tcp'){
+
+                    }
+                }
+                catch(ex){
+                    throw Error('Unable to initialize logger. Please check custom logger definition.')
+                }
+        }
     }
 
     public getLogger(){
