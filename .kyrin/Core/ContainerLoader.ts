@@ -10,9 +10,9 @@ export default class AppContainer{
     private services;
     private logger :KLogger;
     constructor(mode :string,serverDirectory :string){
-        this.logger=new KLogger(mode,serverDirectory,null);
-        this.logger.kInfo("Initializing kyrin...");
         this.loadConfigAndParams(mode,serverDirectory);
+        this.logger=new KLogger(mode,serverDirectory,this.getConfig('application'));
+        this.logger.kInfo("Initializing kyrin...");
         this.loadServices(serverDirectory);
     }
 
@@ -20,11 +20,10 @@ export default class AppContainer{
         try {
             this.config=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/config-"+mode+".yml"), 'utf8'));
             this.params=yamlEngine.safeLoad(fs.readFileSync(path.join(serverDirectory,"config/parameters.yml"), 'utf8'));
-            this.config['application']['env']=mode;
+            if (this.config==null)
+                throw Error("Unable to find a valid configuration file.");
         }catch (e){
-           this.logger.kErr("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message,e);
-           this.logger.kInfo("Terminating app due to error");
-           throw Error("Failed to read app configuration. (Bootstrap Error) for environment"+mode+" : " + e.message);
+           throw Error("Failed to read app configuration. (Bootstrap Error) for environment "+mode+" : " + e.message);
         }
     }
 
@@ -41,10 +40,11 @@ export default class AppContainer{
         }
         else return null;
     }
-
+ 
     public getParameter(key :string) :any{
-        if (typeof (this.params['global'][key]) !== 'undefined' && this.params['global'][key]!==""){
-            return this.params['global'][key];
+
+        if (this.params!==null && typeof (this.params[key]) !== 'undefined' && this.params[key]!==""){
+            return this.params[key];
         }
         else return null;
     }
@@ -61,5 +61,10 @@ export default class AppContainer{
 
     public getNetworkLogger(){
         return this.logger.getNetworkLogger();
+    }
+
+    public memOptimize(){
+        if (this.getConfig('application')!==null)
+            this.config.application=false;
     }
 }

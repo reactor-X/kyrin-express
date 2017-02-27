@@ -17,10 +17,13 @@ export default class PathAliasBinder{
                 app.use(pathBindings[pathAlias][0], express.static(path.join(serverDirectory,pathBindings[pathAlias][1])));
             }
         }catch(e){
-            if (typeof app.get('container').getConfig('application')['path_bindings'] !=='undefined'){
+            let appConfig=app.get('container').getConfig('application');
+            if (appConfig!==null && typeof app.get('container').getConfig('application')['path_bindings'] !=='undefined'){
                 logger.kErr('Unable to parse path bindings in configuration. Please, check declaration format.',e);
                 logger.kInfo("Terminating app due to error");
                 throw Error('Unable to parse path bindings in configuration. Please, check declaration format.');
+            }else{
+                return;
             }
         }
     }

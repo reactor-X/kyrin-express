@@ -1,8 +1,22 @@
 application:
+    name: kyrin
     path_bindings: #Relative to server directory (Names are for informative purpose, binding pattern ['aliaspath','path-wrt-server']).
             binaries: ['/lib','node_modules']
             styles: ['/css','public/assets/css']
             javascripts: ['/js','public/assets/js']
+    connections:
+        logstash:
+            host: localhost
+            port: 5000
+        mongodb:
+            host:
+            port:
+            database:
+            username:
+            password:
+    logger:
+        mode: file  #Supports tcp/file (Defaults to 'file')
+        path: /home/ravi/Documents #Path to directory (existing ).
 
 middlewares:    #Still in alpha, supports express-session and similar initialization patterns. These are bootstrapped in order.
 
