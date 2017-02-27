@@ -12,7 +12,7 @@ export default class AppContainer{
     constructor(mode :string,serverDirectory :string){
         this.loadConfigAndParams(mode,serverDirectory);
         if(typeof (this.getConfig('application')['logger'])!== 'undefined')
-            this.logger=new KLogger(mode,serverDirectory,this.getConfig('application')['logger']);
+            this.logger=new KLogger(mode,serverDirectory,this.getConfig('application'));
         else
             this.logger=new KLogger(mode,serverDirectory,null);
         this.logger.kInfo("Initializing kyrin...");
@@ -44,7 +44,7 @@ export default class AppContainer{
         }
         else return null;
     }
-
+ 
     public getParameter(key :string) :any{
         if (typeof (this.params['global'][key]) !== 'undefined' && this.params['global'][key]!==""){
             return this.params['global'][key];

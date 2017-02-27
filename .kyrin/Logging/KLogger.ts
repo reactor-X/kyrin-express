@@ -10,17 +10,15 @@ export default class KLogger{
     private static logPath ;
     private static logType;
     private static logDepth;
-    constructor(mode :string, serverDirectory :string,customDirectory :string){
+    constructor(mode :string, serverDirectory :string,appConfig :string){
         if (mode=='dev')
             KLogger.logDepth='trace';
         else
             KLogger.logDepth='info'
-        this.prepareLogDirectory(mode,serverDirectory,customDirectory);
-        this.initLogger();
+        this.configureAndInit(mode,serverDirectory,appConfig);
     }
-
-    private initLogger(){
-    this.kyrin_logger=bunyan.createLogger({
+    private createFileLogger(){
+        this.kyrin_logger=bunyan.createLogger({
                                             name: "system",
                                             streams: [
                                                         {   type: "rotating-file",
@@ -35,13 +33,28 @@ export default class KLogger{
                                             streams: [
                                                         {   type: "rotating-file",
                                                             path: path.join(KLogger.logPath,"network.log"),
-                                                            level: "info",
+                                                            level: KLogger.logDepth,
                                                             period: "1d",   // daily rotation 
                                                         }
                                                     ]
                                         });
     }
 
+    private  createTcpBunyanLogger(connectionspec,appName){
+        this.kyrin_logger=bunyan.createLogger({
+                                            name: appName,
+                                            streams: [
+                                                        {   type: "raw",
+                                                            stream: require('bunyan-logstash-tcp').createStream({
+                                                                    host: connectionspec['host'],
+                                                                    port: connectionspec['port']
+                                                            })
+                                                        }
+                                                    ]
+                                        });
+       this.network_logger=this.kyrin_logger;
+        
+    }
     public kErr(message,error=null){ 
         //Log errors
         error==null?this.kyrin_logger.error(message):this.kyrin_logger.error({err: error}, message);
@@ -56,25 +69,33 @@ export default class KLogger{
     }
     private static prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
         KLogger.logPath=customDirectory==null?path.join(serverDirectory,"var/log/"+mode):path.join(customDirectory,mode);
+        mkdirp(customDirectory, function(err) { 
+            if (err){
+                throw Error("Unable to initialize logger. : "+ err);
+            }
+        });
         mkdirp(KLogger.logPath, function(err) { 
             if (err){
                 throw Error("Unable to initialize logger. : "+ err);
             }
-           
         });
     }
 
-    private static configure(mode :string,serverDirectory :string,config ){
-        if ((typeof config)==='undefined' || config===null)
+    private configureAndInit(mode :string,serverDirectory :string,appConfig ){
+        if ((typeof appConfig)==='undefined' || appConfig===null)
             KLogger.prepareLogDirectory(mode,serverDirectory,null); 
         else{
                 try{
-                    if (config.mode=='file'){
-                        KLogger.prepareLogDirectory(mode,null,config.path);
+                    if (appConfig.logger.mode=='file'){
+                        KLogger.logType='file';
+                        KLogger.prepareLogDirectory(mode,null,appConfig.logger.path);
+                        this.createFileLogger();
                     }
-                    else if (config.mode=='tcp'){
-
+                    else if (appConfig.mode=='tcp'){
+                        let connection=appConfig.connections[appConfig.logger.connection];
+                        this.createTcpBunyanLogger(connection,appConfig['name']);
                     }
+                    else KLogger.prepareLogDirectory(mode,serverDirectory,null); //Defaults to server directory path.
                 }
                 catch(ex){
                     throw Error('Unable to initialize logger. Please check custom logger definition.')

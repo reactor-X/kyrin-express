@@ -16,7 +16,7 @@ application:
             password:
     logger:
         mode: file  #Supports tcp/file (Defaults to 'file')
-        path: /home/ravi/Documents/logs #Path to directory.
+        path: /home/ravi/Documents #Path to directory (existing ).
 
 middlewares:    #Still in alpha, supports express-session and similar initialization patterns. These are bootstrapped in order.
 
