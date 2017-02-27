@@ -8,8 +8,8 @@ export default class KLogger{
     private kyrin_logger;
     private network_logger;
     private static logPath ;
-    private static logType;
     private static logDepth;
+    private static appName;
     constructor(mode :string, serverDirectory :string,appConfig :string){
         if (mode=='dev')
             KLogger.logDepth='trace';
@@ -19,7 +19,7 @@ export default class KLogger{
     }
     private createFileLogger(){
         this.kyrin_logger=bunyan.createLogger({
-                                            name: "system",
+                                            name: KLogger.appName+"-system",
                                             streams: [
                                                         {   type: "rotating-file",
                                                             path: path.join(KLogger.logPath,"app.log"),
@@ -29,7 +29,7 @@ export default class KLogger{
                                                     ]
                                         });
     this.network_logger=bunyan.createLogger({
-                                            name: "network",
+                                            name: KLogger.appName+"-network",
                                             streams: [
                                                         {   type: "rotating-file",
                                                             path: path.join(KLogger.logPath,"network.log"),
@@ -40,9 +40,9 @@ export default class KLogger{
                                         });
     }
 
-    private  createTcpBunyanLogger(connectionspec,appName){
+    private  createTcpBunyanLogger(connectionspec){
         this.kyrin_logger=bunyan.createLogger({
-                                            name: appName,
+                                            name: KLogger.appName,
                                             streams: [
                                                         {   type: "raw",
                                                             stream: require('bunyan-logstash-tcp').createStream({
@@ -84,16 +84,15 @@ export default class KLogger{
     private configureAndInit(mode :string,serverDirectory :string,appConfig ){
         if ((typeof appConfig)==='undefined' || appConfig===null)
             KLogger.prepareLogDirectory(mode,serverDirectory,null); 
-        else{
+        else{   KLogger.appName=appConfig['name']!==null && (typeof appConfig['name']).toLowerCase()!=='undefined'?appConfig['name']:'kyrin';
                 try{
                     if (appConfig.logger.mode=='file'){
-                        KLogger.logType='file';
                         KLogger.prepareLogDirectory(mode,null,appConfig.logger.path);
-                        this.createFileLogger();
+                         this.createFileLogger();
                     }
                     else if (appConfig.mode=='tcp'){
                         let connection=appConfig.connections[appConfig.logger.connection];
-                        this.createTcpBunyanLogger(connection,appConfig['name']);
+                        this.createTcpBunyanLogger(connection);
                     }
                     else KLogger.prepareLogDirectory(mode,serverDirectory,null); //Defaults to server directory path.
                 }
