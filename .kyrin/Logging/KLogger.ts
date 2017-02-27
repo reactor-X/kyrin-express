@@ -69,11 +69,14 @@ export default class KLogger{
     }
     private static prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
         KLogger.logPath=customDirectory==null?path.join(serverDirectory,"var/log/"+mode):path.join(customDirectory,mode);
-        mkdirp(customDirectory, function(err) { 
+        console.log(KLogger.logPath);
+        if (customDirectory!==null){
+            mkdirp(customDirectory, function(err) {
             if (err){
                 throw Error("Unable to initialize logger. : "+ err);
             }
-        });
+            });
+        }
         mkdirp(KLogger.logPath, function(err) { 
             if (err){
                 throw Error("Unable to initialize logger. : "+ err);
@@ -82,13 +85,16 @@ export default class KLogger{
     }
 
     private configureAndInit(mode :string,serverDirectory :string,appConfig ){
-        if ((typeof appConfig)==='undefined' || appConfig===null)
+        if (((typeof appConfig)==='undefined' || appConfig===null)||(appConfig['logger']=== 'undefined'||appConfig['logger']==null)){
+            KLogger.appName='kyrin';
             KLogger.prepareLogDirectory(mode,serverDirectory,null); 
+            this.createFileLogger();
+        }
         else{   KLogger.appName=appConfig['name']!==null && (typeof appConfig['name']).toLowerCase()!=='undefined'?appConfig['name']:'kyrin';
                 try{
                     if (appConfig.logger.mode=='file'){
                         KLogger.prepareLogDirectory(mode,null,appConfig.logger.path);
-                         this.createFileLogger();
+                        this.createFileLogger();
                     }
                     else if (appConfig.mode=='tcp'){
                         let connection=appConfig.connections[appConfig.logger.connection];
