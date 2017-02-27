@@ -14,7 +14,7 @@ export default class KLogger{
         if (mode=='dev')
             KLogger.logDepth='trace';
         else
-            KLogger.logDepth='info'
+            KLogger.logDepth='info';
         this.configureAndInit(mode,serverDirectory,appConfig);
     }
     private createFileLogger(){
@@ -47,8 +47,10 @@ export default class KLogger{
                                                         {   type: "raw",
                                                             stream: require('bunyan-logstash-tcp').createStream({
                                                                     host: connectionspec['host'],
-                                                                    port: connectionspec['port']
-                                                            })
+                                                                    port: connectionspec['port'],
+                                                                    max_connect_retries: 10,
+                                                                    retry_interval: 1000 * 60
+                                                                    }).on('error', console.log)
                                                         }
                                                     ]
                                         });
@@ -96,7 +98,7 @@ export default class KLogger{
                         KLogger.prepareLogDirectory(mode,null,appConfig.logger.path);
                         this.createFileLogger();
                     }
-                    else if (appConfig.mode=='tcp'){
+                    else if (appConfig.logger.mode=='tcp'){
                         let connection=appConfig.connections[appConfig.logger.connection];
                         this.createTcpBunyanLogger(connection);
                     }
