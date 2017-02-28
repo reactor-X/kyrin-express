@@ -50,7 +50,7 @@
     "mongoose": "^4.8.5",
     "passport": "^0.3.2",
     "pm2": "^2.4.1",
-    "serve-favicon": "^2.4.0",
+    "serve-favicon": "^2.4.1",
     "socket.io": "^1.7.3"
   }
 }
