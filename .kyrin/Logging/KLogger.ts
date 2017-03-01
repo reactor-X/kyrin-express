@@ -71,7 +71,6 @@ export default class KLogger{
     }
     private static prepareLogDirectory(mode :string,serverDirectory :string,customDirectory :string=null) :void{
         KLogger.logPath=customDirectory==null?path.join(serverDirectory,"var/log/"+mode):path.join(customDirectory,mode);
-        console.log(KLogger.logPath);
         if (customDirectory!==null){
             mkdirp(customDirectory, function(err) {
             if (err){

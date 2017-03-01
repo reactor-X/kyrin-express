@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import {ServiceLoader} from "./ServiceLoader";
 import KLogger from "../Logging/KLogger";
-
+import ODMManager from "../ODM/ODMManager";
 export default class AppContainer{
     private params;
     private config;
@@ -14,6 +14,7 @@ export default class AppContainer{
         this.logger=new KLogger(mode,serverDirectory,this.getConfig('application'));
         this.logger.kInfo("Initializing kyrin...");
         this.loadServices(serverDirectory);
+        ODMManager.Instance(this.getConfig('application'),serverDirectory);
     }
 
     private loadConfigAndParams(mode :string,serverDirectory :string){

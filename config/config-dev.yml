@@ -9,9 +9,10 @@ application:
             host: localhost
             port: 5000
         mongodb:
-            host:
-            port:
-            database:
+            type: mongo
+            host: localhost
+            port: 27017
+            database: test 
             username:
             password:
     logger:
