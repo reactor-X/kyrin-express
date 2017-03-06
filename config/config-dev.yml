@@ -9,14 +9,15 @@ application:
             host: localhost
             port: 5000
         mongodb:
-            host:
-            port:
-            database:
-            username:
-            password:
-    logger:
-        mode: file  #Supports tcp/file (Defaults to 'file')
-        path: /home/ravi/Documents #Path to directory (existing ).
+            type: mongo
+            host: localhost
+            # port: 27017
+            database: test 
+            # username:
+            # password:
+    # logger:
+    #     mode: file  #Supports tcp/file (Defaults to 'file')
+    #     path: /home/ravi/Documents #Path to directory (existing ).
 
 middlewares:    #Still in alpha, supports express-session and similar initialization patterns. These are bootstrapped in order.
 

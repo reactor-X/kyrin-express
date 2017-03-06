@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-import {kyrinApp} from "../kyrin";
+import { kyrinApp } from "../kyrin";
 import * as http from "http";
 
 var debug = require('debug')('nodejs-regular-webapp2:server');
