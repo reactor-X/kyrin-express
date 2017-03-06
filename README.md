@@ -4,7 +4,7 @@ An (purposefully) opinionated node framework powered by express 4.x and typescri
 Kyrin enables:
   - Centralized YML based configuration for node applications.
   - Structured express set up.
-  - Kyrin container, gives access to all application services.
+  - Kyrin container, gives access to all application services and mongoose models defined.
   - Automatic initialization of express middleware.
   - Automatic loading of routes by simple declarations.
   - Typescript support in Node enabling easier maintenance, support for latest standards, code portability and type checks!
@@ -50,8 +50,6 @@ Kyrin-Express bundles these open source middlwares with it along with their type
 * ejs
 
 ### Todos
-
- - Integrate mongoose in services.
  - More configuration options
  - Rethink Kyrin's internal code structuring.
 
