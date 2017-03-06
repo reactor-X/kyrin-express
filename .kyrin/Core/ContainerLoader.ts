@@ -9,12 +9,16 @@ export default class AppContainer{
     private config;
     private services;
     private logger :KLogger;
+    private connections;
+    private modelManager;
     constructor(mode :string,serverDirectory :string){
         this.loadConfigAndParams(mode,serverDirectory);
         this.logger=new KLogger(mode,serverDirectory,this.getConfig('application'));
         this.logger.kInfo("Initializing kyrin...");
         this.loadServices(serverDirectory);
-        ODMManager.Instance(this.getConfig('application'),serverDirectory);
+        let odm=new ODMManager(this.getConfig('application'),serverDirectory,this.logger);
+        this.connections=odm.CONNECTIONS;
+        this.modelManager=odm.MODELMANAGER;
     }
 
     private loadConfigAndParams(mode :string,serverDirectory :string){
@@ -67,5 +71,17 @@ export default class AppContainer{
     public memOptimize(){
         if (this.getConfig('application')!==null)
             this.config.application=false;
+    }
+
+    public getModel(name :string){
+        return this.modelManager.getModel(name);
+    }
+
+    public getConnection(name :string){
+         if (typeof (this.connections[name]) !== 'undefined' && typeof (this.connections[name])!==null){
+            return this.connections[name].getConnection();
+        }
+        else this.logger.kErr("That connection doesn't exist yet. Check with configuration or reboot the kyrin app if you made a change to service declarations.");
+   
     }
 }

@@ -17,7 +17,7 @@ export default class KyrinEngine{
             KyrinRouter.generateRoutes(app,serverDirectory,app.get('container').getLogger());
             PathAliasBinder.bindAccessPaths(app,serverDirectory,app.get('container').getLogger());
             ExpressIntegrator.attachErrorLogger(app);
-            app.get('container').getLogger().kInfo("Kyrin ready..");
+            app.get('container').getLogger().kInfo("Kyrin core ready.. Wait for models to load..");
         }
     }
 }

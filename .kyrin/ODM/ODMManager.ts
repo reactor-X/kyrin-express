@@ -1,29 +1,31 @@
 import KyrinMongo from "./MongoDB/KyrinMongo";
+import MongoConnection from "./MongoDB/MongoConnection";
 export default class ODMManager{
-    private static instances :Array <any>;
-    private constructor(){
-
-    }
-    public static Instance(appConfig :any,serverDirectory :string){
-        if ((typeof ODMManager.instances) =='undefined')
+    public CONNECTIONS :Array <any>;
+    public MODELMANAGER;
+    public constructor(appConfig :any,serverDirectory :string,logger){
+        if ((typeof this.CONNECTIONS) =='undefined')
             {
-                ODMManager.instances=[];
-                return ODMManager.createConnections(appConfig,serverDirectory);
+                this.CONNECTIONS=[];
+                this.createConnections(appConfig,serverDirectory,logger);
             }
-        else return ODMManager.instances;
     }
 
-    private static createConnections(appConfiguration,serverDirectory){
+    private  createConnections(appConfiguration,serverDirectory,logger){
         for (let connection in appConfiguration.connections){
             if ((typeof appConfiguration.connections[connection]['type'])=='undefined' || appConfiguration.connections[connection]['type']==null)
             {
                 continue;
             }
             switch (appConfiguration.connections[connection]['type']){
-                case 'mongo': ODMManager.instances[connection]=new KyrinMongo(appConfiguration.connections[connection],serverDirectory);
+                case 'mongo': this.CONNECTIONS[connection]=new MongoConnection(appConfiguration.connections[connection],logger);
+                              this.MODELMANAGER=new KyrinMongo(serverDirectory,logger);
+                              break;
+                default: logger.kErr("Invalid connection type for "+connection);
             }
         }
-        return ODMManager.instances;
+        if ((typeof this.MODELMANAGER)=='undefined'){
+            this.MODELMANAGER=null;
+        }
     }
-    
 }

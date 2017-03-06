@@ -11,13 +11,13 @@ application:
         mongodb:
             type: mongo
             host: localhost
-            port: 27017
+            # port: 27017
             database: test 
-            username:
-            password:
-    logger:
-        mode: file  #Supports tcp/file (Defaults to 'file')
-        path: /home/ravi/Documents #Path to directory (existing ).
+            # username:
+            # password:
+    # logger:
+    #     mode: file  #Supports tcp/file (Defaults to 'file')
+    #     path: /home/ravi/Documents #Path to directory (existing ).
 
 middlewares:    #Still in alpha, supports express-session and similar initialization patterns. These are bootstrapped in order.
 
