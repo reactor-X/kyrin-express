@@ -55,6 +55,7 @@ export default class AppContainer {
     }
     public get(name: string) {
         if (typeof (this.services[name]) !== 'undefined') {
+            this.services[name].container=this;
             return this.services[name];
         }
         else throw Error("That service doesn't exist yet. Check with services.yml or reboot the node server if you made a change to service declarations.");
