@@ -8,7 +8,7 @@
     "build": "tsc",
     "stop": "pm2 kill",
     "verbose": "DEBUG=express* node boot/www.js",
-    "package":"tsc && mkdirp dist && rsync -r --exclude '.git' --exclude '.vscode' --exclude 'var/log/dev/*' --exclude 'dist' --exclude 'var/log/prod/*' --exclude 'node_modules' --exclude 'tsconfig.json' --exclude '.gitkeep' --exclude '*.log' --exclude '*.ts' --progress . dist/ && cd dist && npm install --production"
+    "package": "tsc && mkdirp dist && rsync -r --exclude '.git' --exclude '.vscode' --exclude 'var/log/dev/*' --exclude 'dist' --exclude 'var/log/prod/*' --exclude 'node_modules' --exclude 'tsconfig.json' --exclude '.gitkeep' --exclude '*.log' --exclude '*.ts' --progress . dist/ && cd dist && npm install --production"
   },
   "author": "Ravi Semwal",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "url": "https://github.com/reactor-X/kyrin-express.git"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "bunyan": "^1.8.5",
     "bunyan-logstash-tcp": "^0.3.5",
