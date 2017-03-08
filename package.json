@@ -36,7 +36,6 @@
     "url": "https://github.com/reactor-X/kyrin-express.git"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "bunyan": "^1.8.5",
     "bunyan-logstash-tcp": "^0.3.5",

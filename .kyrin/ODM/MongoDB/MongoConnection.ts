@@ -1,10 +1,8 @@
 import mongoose = require("mongoose");
-import customPromise = require("bluebird");
 export default class MongoConnection {
     private static connection;
     private static logger;
     constructor(connectionConfig, logger) {
-        mongoose.Promise = customPromise;
         MongoConnection.logger = logger;
         mongoose.connection.on('error', function () { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.') });
         mongoose.connection.once('open', function () {
