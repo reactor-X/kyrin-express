@@ -36,13 +36,13 @@ export default class MongoConnection {
         }
         else cstring += connectionConfig['host'];
 
-        if ((typeof connectionConfig['port']) !== 'undefined' || connectionConfig['port'] !== null) {
+        if ((typeof connectionConfig['port']) !== 'undefined' && connectionConfig['port'] !== null) {
             cstring += ":" + connectionConfig['port'];
         }
 
         cstring += "/";
 
-        if ((typeof connectionConfig['database']) !== 'undefined' || connectionConfig['database'] !== null) {
+        if ((typeof connectionConfig['database']) !== 'undefined' && connectionConfig['database'] !== null) {
             cstring += connectionConfig['database'];
         }
 
