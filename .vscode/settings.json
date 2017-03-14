@@ -8,6 +8,5 @@
         "src/**/*.js":true,
         "boot/**/*.js":true,
         "kyrin/**/*.js":true
-        //".kyrin":true
     }
 }

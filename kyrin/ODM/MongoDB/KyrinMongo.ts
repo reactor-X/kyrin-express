@@ -6,7 +6,6 @@ import * as readdirp from "readdirp";
 export default class KyrinMongo {
     private static modelFiles: Array<any>;
     private static schemaDirectory: string;
-    public static em;
     private static logger;
     private static serverDirectory;
     public constructor(serverDirectory, logger) {

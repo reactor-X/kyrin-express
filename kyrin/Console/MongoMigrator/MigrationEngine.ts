@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 'use strict';
-import * as program from 'commander';
 import * as colors from 'colors/safe';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -14,8 +13,6 @@ export default class MigrationEngine {
 
   private args;
   private connections;
-  private configFileName: string;
-  private actionType: string;
   private connectionsConfig: Array<Object>;
 
   constructor(args) {
@@ -147,9 +144,7 @@ class MigrationRunner {
   private static config;
   private configPath;
   private migrations;
-  private connectionInstance;
   private connectionName;
-  private no_of_migrations;
   constructor(config, targetName, direction, configPath, connectionName) {
     MigrationRunner.config = config;
     this.targetName = targetName;
