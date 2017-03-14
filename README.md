@@ -37,7 +37,11 @@ $ npm install
 $ npm run build
 $ npm start
 ```
+You may want to run kyrin in verbose mode during development for more in depth stats
 
+```sh
+$ npm run verbose
+```
 
 ### Bundled Middlewares
 
