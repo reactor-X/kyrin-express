@@ -15,7 +15,7 @@ export default class MongoConnection {
         });
         let connectionString = MongoConnection.getConnectionString(connectionConfig);
         try {
-            mongoose.createConnection(connectionString);
+            mongoose.connect(connectionString);
             mongoose['info']={'name':connection_name,'string':connectionString};
             MongoConnection.connection = mongoose;
         } catch (e) {

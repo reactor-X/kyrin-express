@@ -84,7 +84,7 @@ export default class MigrationEngine {
       };
     }
     mkdirp(path.join(process.cwd(), 'migrations', connection_name, 'patches'), function (err) {
-      if (err) this.showFail('Unable to create migration directories. Please, make sure you have permissions.');
+      if (err) MigrationEngine.showFail('Unable to create migration directories. Please, make sure you have permissions.');
       //Create configuration file if not exists.
       let configData = JSON.stringify(CONFIG, null, 2);
       fs.writeFileSync(configPath, configData);
@@ -95,7 +95,7 @@ export default class MigrationEngine {
       let filename = path.join(process.cwd(), 'migrations', connection_name, 'patches', migrationName);
       let data = fs.readFileSync(template);
       fs.writeFileSync(filename, data, { flag: 'w' });
-      this.showSuccess('Generated new migration ' + migrationName + ' for ' + connection_name + ".");
+      MigrationEngine.showSuccess('Generated new migration ' + migrationName + ' for ' + connection_name + ".");
     }.bind(this));
 
   }
@@ -164,7 +164,7 @@ class MigrationRunner {
     let CONFIG = MigrationRunner.config;
     var name_of_migration_file = null;
     var number_of_migrations = null;
-    if (isNaN(this.targetName) && this.targetName !== null && this.targetName !== '' && (typeof (this.targetName)) !== 'undefined') {
+    if (this.targetName !== null && this.targetName !== '' && (typeof (this.targetName)) !== 'undefined') {
       name_of_migration_file = this.targetName;
       number_of_migrations = 1;
     } else if (this.direction == 'down' && (typeof (this.targetName)) === 'undefined') {
@@ -179,7 +179,6 @@ class MigrationRunner {
         return name_of_migration_file === filename.split('.js')[0];
       });
     }
-
     if (typeof name_of_migration_file !== 'undefined' && this.migrations.length == 0) {
       MigrationEngine.showFail('\nCannot find that migration (' + name_of_migration_file + ').\n');
       return;

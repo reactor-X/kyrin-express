@@ -50,33 +50,36 @@ export default class KyrinMongo {
             try {
                 let modelInstance = require('./' + path.join(path.relative(__dirname, KyrinMongo.serverDirectory), KyrinMongo.modelFiles[modelName]));
                 migfiles[modelInstance.db.base.info.name] = {};
-                migfiles[modelInstance.db.base.info.name]['connection'] = modelInstance.db.base.info.string;
-                migfiles[modelInstance.db.base.info.name]['current_timestamp'] = 0;
-                migfiles[modelInstance.db.base.info.name]['models'] = {};
-                migfiles[modelInstance.db.base.info.name]['basepath'] = path.join('migrations',modelName,'patches');
-                migfiles[modelInstance.db.base.info.name]['models'][modelName] =KyrinMongo.modelFiles[modelName];
+                migfiles[modelInstance.db.base.info.name][modelName] = path.relative(KyrinMongo.schemaDirectory,KyrinMongo.modelFiles[modelName]);
             } catch (e) {
-                KyrinMongo.logger.kErr("Unable to read model for migration init (Invalid schema file?) : " + " " + e.message);
+                KyrinMongo.logger.kErr(modelName + " cannot be added to migration registry." + " " + e.message);
             }
         }
-
-        for (let filename in migfiles) {
-            let dirname = path.join(serverDirectory, 'migrations', filename);
-            mkdirp(dirname, function (err) {
-                if (err) {
-                    throw Error("Unable to create migration directories. : " + err);
-                }
-                fs.open(path.join(serverDirectory ,filename+".migrate.json"), 'r', function (err, fd) {
+        let migFile: string;
+        for (migFile in migfiles) {
+                let migrationConfigDir = path.join(serverDirectory, 'migrations', migFile);
+                mkdirp(migrationConfigDir, function (err) {
                     if (err) {
-                        fs.writeFile(path.join(serverDirectory ,filename+".migrate.json"), JSON.stringify(migfiles[filename]), function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
+                        throw Error("Unable to create migration directories. : " + err);
                     }
-                });
+                    fs.open(path.join(migrationConfigDir ,"kyrin.migrate.json"), 'r', function (err, fd) {
+                        if (!err) {
+                            let current_config = require(path.join(path.relative(__dirname, migrationConfigDir), 'kyrin.migrate.json'));
+                            for (let model in migfiles[migFile]){
+                                current_config['models'][model]=migfiles[migFile][model];
+                            }
+                            current_config=JSON.stringify(current_config, null, 2)
+                            fs.writeFile(path.join(migrationConfigDir, "kyrin.migrate.json"), current_config, function (err) {
+                                if (err) {
+                                    return KyrinMongo.logger.kErr(err);
+                                }
+                            });
+                        }else{
+                            return KyrinMongo.logger.kErr(err);
+                        }
+                    });
 
-            });
+                });
         }
     }
 
