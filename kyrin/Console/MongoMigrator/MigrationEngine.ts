@@ -1,10 +1,8 @@
 #! /usr/bin/env node
 
 'use strict';
-import * as prompt from 'prompt';
 import * as program from 'commander';
 import * as colors from 'colors/safe';
-import * as slug from 'slug';
 import * as path from 'path';
 import * as fs from 'fs';
 import mongoose = require('mongoose');  //Workaround for custom promise.
