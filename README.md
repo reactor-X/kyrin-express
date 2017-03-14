@@ -37,12 +37,34 @@ $ npm install
 $ npm run build
 $ npm start
 ```
+### Developing With Kyrin-Express
 You may want to run kyrin in verbose mode during development for more in depth stats
 
 ```sh
 $ npm run verbose
 ```
+Kyrin app can be packaged into distribution containing only javascript files easily, without development environment files.
 
+```sh
+$ npm run package
+```
+
+Kyrin app can be packaged into distribution containing only javascript files easily, without development environment files.
+
+```sh
+$ npm run package
+```
+A console is now accessible that can allow access to migration subsystem, you can use it using
+
+```sh
+$ node kyrin/console
+```
+To view the logs in the console, install bunyan globally. Below example shows accessing development logs stored by default.
+
+```sh
+$ npm install -g bunyan
+$ bunyan -c var/log/dev/app.log
+```
 ### Bundled Middlewares
 
 Kyrin-Express bundles these open source middlwares with it along with their types(@types).
@@ -60,8 +82,8 @@ Kyrin-Express bundles these open source middlwares with it along with their type
 * bunyan-middleware
 
 ### Todos
- - Performance optimizations
  - Improvements for the migration sub system.
+ - Documentation for framework.
 
 License
 ----
