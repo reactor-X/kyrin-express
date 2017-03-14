@@ -12,7 +12,7 @@
         "node_modules"
     ],
     "include": [
-        ".kyrin/**/*.ts",
+        "kyrin/**/*.ts",
         "src/**/*.ts",
         "boot/**/*.ts"
     ]

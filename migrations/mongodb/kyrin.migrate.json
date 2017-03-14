@@ -1,0 +1,8 @@
+{
+  "basepath": "patches",
+  "connection": "mongodb://localhost/test",
+  "current_timestamp": 1489134965550,
+  "models": {
+    "User": "Example/User.js"
+  }
+}
