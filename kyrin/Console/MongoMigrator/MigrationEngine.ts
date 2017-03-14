@@ -137,7 +137,7 @@ export default class MigrationEngine {
       CONFIG = require(path.relative(__dirname, configFilePath));
       new MigrationRunner(CONFIG, migration_name, direction, configPath, connection_name);
     } catch (ex) {
-      MigrationEngine.showFail("No migration registry exists for " + connection_name + " yet. You can create it using 'migrations:create " + connection_name + "'");
+      MigrationEngine.showFail("No migration registry exists for " + connection_name + " yet. You can create it using 'migrations create " + connection_name + "'");
       return;
     }
   }
