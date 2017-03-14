@@ -60,8 +60,8 @@ Kyrin-Express bundles these open source middlwares with it along with their type
 * bunyan-middleware
 
 ### Todos
- - More configuration options
- - Rethink Kyrin's internal code structuring.
+ - Performance optimizations
+ - Improvements for the migration sub system.
 
 License
 ----
