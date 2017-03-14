@@ -1,10 +1,7 @@
 import * as express from "express";
-import * as helmet from "helmet";
-import * as bodyParser  from "body-parser";
-import * as expressSession from "express-session";
+import * as bodyParser from "body-parser";
 import * as path from "path";
-import * as fs from "fs";
-import KyrinEngine from "./.kyrin/KyrinEngine";
+import KyrinEngine from "./kyrin/KyrinEngine";
 
 let app = express();
 
@@ -17,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Initialise kyrin.
-KyrinEngine.boot(app,__dirname);
+KyrinEngine.boot(app, __dirname);
 export default app.get('container');
 
 // catch 404 and forward to error handler
@@ -49,5 +46,5 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-export var kyrinApp=app;
+export var kyrinApp = app;
 //# sourceMappingURL=app.js.map

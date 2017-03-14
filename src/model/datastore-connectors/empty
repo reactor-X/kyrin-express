@@ -1,8 +1,0 @@
-/*
-
-Keep your datastore connector module(s) here. Set the connection properties (e.g. event handlers, methods). Or even write a wrapper to expose custom
-methods throughout the app. This object should be available to the app as the database instance preferrably.
-
-You can expose these into config/AppContainer to make it available throughout the app.
-
-*/

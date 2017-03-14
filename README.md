@@ -4,10 +4,14 @@ An (purposefully) opinionated node framework powered by express 4.x and typescri
 Kyrin enables:
   - Centralized YML based configuration for node applications.
   - Structured express set up.
-  - Kyrin container, gives access to all application services.
+  - Kyrin container, gives access to all application services and mongoose models defined.
   - Automatic initialization of express middleware.
   - Automatic loading of routes by simple declarations.
   - Typescript support in Node enabling easier maintenance, support for latest standards, code portability and type checks!
+  - Automatic loading of models from schema directory, available directly in the container.
+  - Support for multiple connections.
+  - JSON based logging that can be routed directly to systems like logstash for insights.
+  - Migration support for MongoDB. (Native console in development)
 
 > The framework is still in development, and uses ejs templates for views (for now), you can freely suggest and contribute to the code, or you can send an [email] or tweet me [@ravisemwal_].
 
@@ -33,8 +37,34 @@ $ npm install
 $ npm run build
 $ npm start
 ```
+### Developing With Kyrin-Express
+You may want to run kyrin in verbose mode during development for more in depth stats
 
+```sh
+$ npm run verbose
+```
+Kyrin app can be packaged into distribution containing only javascript files easily, without development environment files.
 
+```sh
+$ npm run package
+```
+
+Kyrin app can be packaged into distribution containing only javascript files easily, without development environment files.
+
+```sh
+$ npm run package
+```
+A console is now accessible that can allow access to migration subsystem, you can use it using
+
+```sh
+$ node kyrin/console
+```
+To view the logs in the console, install bunyan globally. Below example shows accessing development logs stored by default.
+
+```sh
+$ npm install -g bunyan
+$ bunyan -c var/log/dev/app.log
+```
 ### Bundled Middlewares
 
 Kyrin-Express bundles these open source middlwares with it along with their types(@types).
@@ -48,12 +78,12 @@ Kyrin-Express bundles these open source middlwares with it along with their type
 * serve-favicon
 * socket.io
 * ejs
+* bunyan
+* bunyan-middleware
 
 ### Todos
-
- - Integrate mongoose in services.
- - More configuration options
- - Rethink Kyrin's internal code structuring.
+ - Improvements for the migration sub system.
+ - Documentation for framework.
 
 License
 ----
