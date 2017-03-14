@@ -16,7 +16,7 @@ export default class ODMManager {
                 continue;
             }
             switch (appConfiguration.connections[connection]['type']) {
-                case 'mongo': this.CONNECTIONS[connection] = new MongoConnection(appConfiguration.connections[connection], logger);
+                case 'mongo': this.CONNECTIONS[connection] = new MongoConnection(appConfiguration.connections[connection], connection, logger,);
                     this.MODELMANAGER = new KyrinMongo(serverDirectory, logger);
                     break;
                 default: logger.kErr("Invalid connection type for " + connection);

@@ -11,14 +11,16 @@ export default class AppContainer {
     private logger: KLogger;
     private connections;
     private modelManager;
-    constructor(mode: string, serverDirectory: string) {
+    constructor(mode: string, serverDirectory: string, fullLoad=true) {
         this.loadConfigAndParams(mode, serverDirectory);
-        this.logger = new KLogger(mode, serverDirectory, this.getConfig('application'));
-        this.logger.kInfo("Initializing kyrin...");
-        this.loadServices(serverDirectory);
-        let odm = new ODMManager(this.getConfig('application'), serverDirectory, this.logger);
-        this.connections = odm.CONNECTIONS;
-        this.modelManager = odm.MODELMANAGER;
+        if (fullLoad){
+            this.logger = new KLogger(mode, serverDirectory, this.getConfig('application'));
+            this.logger.kInfo("Initializing kyrin...");
+            this.loadServices(serverDirectory);
+            let odm = new ODMManager(this.getConfig('application'), serverDirectory, this.logger);
+            this.connections = odm.CONNECTIONS;
+            this.modelManager = odm.MODELMANAGER;
+        }
     }
 
     private loadConfigAndParams(mode: string, serverDirectory: string) {

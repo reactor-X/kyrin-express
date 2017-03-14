@@ -2,9 +2,9 @@ import mongoose = require("mongoose");
 export default class MongoConnection {
     private static connection;
     private static logger;
-    constructor(connectionConfig, logger) {
+    constructor(connectionConfig, connection_name, logger) {
         MongoConnection.logger = logger;
-        mongoose.connection.on('error', function () { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.') });
+        mongoose.connection.on('error', function (e) { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.'+e.stack) });
         mongoose.connection.once('open', function () {
             // we're connected!
             MongoConnection.logger.kInfo('Datastore connected.');
@@ -13,9 +13,10 @@ export default class MongoConnection {
             // we're connected!
             MongoConnection.logger.kInfo('Datastore disconnected.');
         });
-        let connectionString = this.getConnectionString(connectionConfig);
+        let connectionString = MongoConnection.getConnectionString(connectionConfig);
         try {
-            mongoose.connect(connectionString);
+            mongoose.createConnection(connectionString);
+            mongoose['info']={'name':connection_name,'string':connectionString};
             MongoConnection.connection = mongoose;
         } catch (e) {
             MongoConnection.logger.kErr('Unable to establish mongo connection with connection string ' + connectionString);
@@ -23,7 +24,7 @@ export default class MongoConnection {
     }
 
     //mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
-    private getConnectionString(connectionConfig): string {
+    public static getConnectionString(connectionConfig): string {
         let cstring = "mongodb://";
 
         if ((typeof connectionConfig['user']) !== 'undefined' && connectionConfig['user'] !== null && (typeof connectionConfig['password']) !== 'undefined' && connectionConfig['password'] !== null) {

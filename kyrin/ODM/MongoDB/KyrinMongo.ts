@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 let fs = require('fs');
 let path = require('path');
+import * as mkdirp from "mkdirp";
 import * as readdirp from "readdirp";
 export default class KyrinMongo {
     private static modelFiles: Array<any>;
@@ -27,6 +28,7 @@ export default class KyrinMongo {
                     KyrinMongo.logger.kErr('Models could not be read. ' + err.message + " |||| " + err.stack);
                     return;
                 }
+                KyrinMongo.prepareMigrationFiles(serverDirectory);
                 KyrinMongo.logger.kInfo('Model files parsed..');
             });
     }
@@ -40,6 +42,42 @@ export default class KyrinMongo {
             return null;
         }
 
+    }
+
+    public static prepareMigrationFiles(serverDirectory: string) {
+        let migfiles = {};
+        for (let modelName in KyrinMongo.modelFiles) {
+            try {
+                let modelInstance = require('./' + path.join(path.relative(__dirname, KyrinMongo.serverDirectory), KyrinMongo.modelFiles[modelName]));
+                migfiles[modelInstance.db.base.info.name] = {};
+                migfiles[modelInstance.db.base.info.name]['connection'] = modelInstance.db.base.info.string;
+                migfiles[modelInstance.db.base.info.name]['current_timestamp'] = 0;
+                migfiles[modelInstance.db.base.info.name]['models'] = {};
+                migfiles[modelInstance.db.base.info.name]['basepath'] = path.join('migrations',modelName,'patches');
+                migfiles[modelInstance.db.base.info.name]['models'][modelName] =KyrinMongo.modelFiles[modelName];
+            } catch (e) {
+                KyrinMongo.logger.kErr("Unable to read model for migration init (Invalid schema file?) : " + " " + e.message);
+            }
+        }
+
+        for (let filename in migfiles) {
+            let dirname = path.join(serverDirectory, 'migrations', filename);
+            mkdirp(dirname, function (err) {
+                if (err) {
+                    throw Error("Unable to create migration directories. : " + err);
+                }
+                fs.open(path.join(serverDirectory ,filename+".migrate.json"), 'r', function (err, fd) {
+                    if (err) {
+                        fs.writeFile(path.join(serverDirectory ,filename+".migrate.json"), JSON.stringify(migfiles[filename]), function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                        });
+                    }
+                });
+
+            });
+        }
     }
 
     private loadModel(modelRelativePath: string) {
