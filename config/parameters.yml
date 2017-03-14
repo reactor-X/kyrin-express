@@ -1,9 +1,4 @@
-#Include accessible parameters here
-
-#Parameters to restrict from global access (e.g for bootstrap)
-protected:
-    db_connection_spec:  mongodb://localhost/heartbeat          #mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
-
-#Parameters to be available globally
+#Include globally accessible parameters here
 global:
     developer: Ravi Semwal
+    db_connection_spec:  mongodb://localhost/heartbeat          #mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
