@@ -49,11 +49,6 @@ Kyrin app can be packaged into distribution containing only javascript files eas
 $ npm run package
 ```
 
-Kyrin app can be packaged into distribution containing only javascript files easily, without development environment files.
-
-```sh
-$ npm run package
-```
 A console is now accessible that can allow access to migration subsystem, you can use it using
 
 ```sh
