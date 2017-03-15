@@ -61,14 +61,14 @@ export default class KyrinMongo {
                     if (err) {
                         throw Error("Unable to create migration directories. : " + err);
                     }
-                    fs.open(path.join(migrationConfigDir ,"kyrin.migrate.json"), 'r', function (err, fd) {
+                    fs.openSync(path.join(migrationConfigDir ,"kyrin.migrate.json"), 'r', function (err, fd) {
                         if (!err) {
                             let current_config = require(path.join(path.relative(__dirname, migrationConfigDir), 'kyrin.migrate.json'));
                             for (let model in migfiles[migFile]){
                                 current_config['models'][model]=migfiles[migFile][model];
                             }
-                            current_config=JSON.stringify(current_config, null, 2)
-                            fs.writeFile(path.join(migrationConfigDir, "kyrin.migrate.json"), current_config, function (err) {
+                            current_config=JSON.stringify(current_config, null, 2);
+                            fs.writeFileSync(path.join(migrationConfigDir, "kyrin.migrate.json"), current_config, function (err) {
                                 if (err) {
                                     return KyrinMongo.logger.kErr(err);
                                 }
