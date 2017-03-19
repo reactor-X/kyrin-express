@@ -4,7 +4,7 @@ export default class MongoConnection {
     private static logger;
     constructor(connectionConfig, connection_name, logger) {
         MongoConnection.logger = logger;
-        mongoose.connection.on('error', function (e) { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.'+e.stack) });
+        mongoose.connection.on('error', function (e) { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.'+e.stack); MongoConnection.connection=null;});
         mongoose.connection.once('open', function () {
             // we're connected!
             MongoConnection.logger.kInfo('Datastore connected.');

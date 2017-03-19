@@ -100,7 +100,7 @@ export default class MigrationEngine {
   public static showFail(msg: string) {
     console.log(colors.red(msg));
   }
-  private showWarn(msg: string) {
+  public static showWarn(msg: string) {
     console.log(colors.yellow(msg));
   }
   private migrate() {
@@ -163,6 +163,8 @@ class MigrationRunner {
     } else if (this.direction == 'down' && (typeof (this.targetName)) === 'undefined') {
       MigrationEngine.showFail('Migration name is mandatory while rolling back.'); //Stop down migration in case of no name specified.
       return;
+    }else if (this.direction=='up' && (typeof (this.targetName)) === 'undefined'){
+      MigrationEngine.showWarn('No name specified for up migration. Executing all new migrations...');
     }
     this.migrations = fs.readdirSync(path.join(this.configPath, CONFIG.basepath));
 
@@ -185,6 +187,7 @@ class MigrationRunner {
       } else if (this.direction == 'down') {
         return timestamp <= CONFIG.current_timestamp;
       }
+      else return false;
     }.bind(this));
     if (this.migrations.length == 0) {
       number_of_migrations = 0;
@@ -235,7 +238,11 @@ class MigrationRunner {
       MigrationEngine.showFail('Error while loading migration file ' + migration);
       process.exit();
     }
-    mongoose.connect(MigrationRunner.config.connection, function () {
+    mongoose.connect(MigrationRunner.config.connection, function (err) {
+      if (err){
+        MigrationEngine.showFail('Unable to establish connection to database');
+        return;
+      }
       let timestamp = this.getTimeStampFromFileName(migration);
       MigrationEngine.showSuccess('\nApplying migration ' + migration + ' - ' + this.direction);
       migration_instance[this.direction].call({

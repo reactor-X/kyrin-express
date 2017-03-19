@@ -1,7 +1,6 @@
 import * as bunyan from "bunyan";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
-import * as process from "process";
 
 export default class KLogger {
 
