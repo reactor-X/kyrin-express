@@ -238,13 +238,14 @@ class MigrationRunner {
       MigrationEngine.showFail('Error while loading migration file ' + migration);
       process.exit();
     }
-    mongoose.connect(MigrationRunner.config.connection, function (err) {
+    mongoose.Promise=Promise;
+    mongoose.connect(MigrationRunner.config.connection, { server: { reconnectTries: 60 } }).catch(function (err) {
       if (err){
         MigrationEngine.showFail('Unable to establish connection to database');
         return;
-      }
+      }else{
       let timestamp = this.getTimeStampFromFileName(migration);
-      MigrationEngine.showSuccess('\nApplying migration ' + migration + ' - ' + this.direction);
+      MigrationEngine.showSuccess('\nApplying migratsion ' + migration + ' - ' + this.direction);
       migration_instance[this.direction].call({
         model: this.loadModel
       }, function () {
@@ -253,6 +254,7 @@ class MigrationRunner {
           timestamp--;  //Reduce timestamp to down migrate.
         this.updateTimestamp(timestamp, callback);
       }.bind(this));
+     }
     }.bind(this));
 
   }

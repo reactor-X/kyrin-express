@@ -4,20 +4,29 @@ export default class MongoConnection {
     private static logger;
     constructor(connectionConfig, connection_name, logger) {
         MongoConnection.logger = logger;
-        mongoose.connection.on('error', function (e) { MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.'+e.stack); MongoConnection.connection=null;});
+        mongoose.Promise = Promise;
+        mongoose.connection.on('error', function (e) {
+            MongoConnection.logger.kErr('Database error : ' + e.message + '. ' + e.stack);
+        });
         mongoose.connection.once('open', function () {
-            // we're connected!
             MongoConnection.logger.kInfo('Datastore connected.');
         });
         mongoose.connection.on('close', function () {
-            // we're connected!
             MongoConnection.logger.kInfo('Datastore disconnected.');
+        });
+        mongoose.connection.on('reconnect', function () {
+            MongoConnection.logger.kInfo('Attempting to reconnect to database ...');
         });
         let connectionString = MongoConnection.getConnectionString(connectionConfig);
         try {
-            mongoose.connect(connectionString);
-            mongoose['info']={'name':connection_name,'string':connectionString};
-            MongoConnection.connection = mongoose;
+            mongoose.connect(connectionString, { server: { reconnectTries: 60 } }).catch(function (err) {
+                if (err) {
+                    MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.' + err.stack);
+                } else {
+                    mongoose['info'] = { 'name': connection_name, 'string': connectionString };
+                    MongoConnection.connection = mongoose;
+                }
+            });
         } catch (e) {
             MongoConnection.logger.kErr('Unable to establish mongo connection with connection string ' + connectionString);
         }
