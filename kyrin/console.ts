@@ -1,6 +1,3 @@
-#! /usr/bin/env node
-
-'use strict';
 import * as program from 'commander';
 import MigrationEngine from './Console/MongoMigrator/MigrationEngine';
 var isValid=false;
