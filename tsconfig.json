@@ -4,9 +4,13 @@
         "target": "es5",
         "noImplicitAny": false,
         "sourceMap": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false
+        "emitDecoratorMetadata": false,
+        "experimentalDecorators": false,
+        "removeComments": true,
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
     },
     "exclude": [
         "node_modules"
