@@ -1,0 +1,9 @@
+import * as express from "express";
+let router = express.Router();
+import container from 'PATH';
+
+router.get('/', function (req, res, next) {
+ //Your code here ...
+});
+
+export = router;
