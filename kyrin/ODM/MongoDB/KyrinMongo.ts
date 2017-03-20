@@ -1,4 +1,3 @@
-let mongoose = require('mongoose');
 let fs = require('fs');
 let path = require('path');
 import * as mkdirp from "mkdirp";
