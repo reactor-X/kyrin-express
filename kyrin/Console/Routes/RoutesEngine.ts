@@ -26,6 +26,10 @@ export default class RoutesEngine {
     }
 
     private generate(args) {
+        if (args.length<2){
+            this.logUsageHelp();
+            return;
+        }
         this.registryName = args[1];
         TerminalMessages.showWarn("Controller will be created inside src:controllers. e.g Home:index");
         RoutesEngine.commandInterface = readline.createInterface(process.stdin, process.stdout)
@@ -45,8 +49,8 @@ export default class RoutesEngine {
     }
     private logUsageHelp() {
         TerminalMessages.showFail('\nValid routes subsystem command missing, did you mean one of these ?');
-        TerminalMessages.showFail('routes generate <route_name> :(Generate new route)\n');
-        TerminalMessages.showFail('routes show :(Show active routes)');
+        TerminalMessages.showFail('routes generate <route_name> :(Generate new route)');
+        TerminalMessages.showFail('routes show :(Show active routes)\n');
     }
 
     private generateDirectory(name, registryName, callback) {
