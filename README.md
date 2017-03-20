@@ -11,7 +11,8 @@ Kyrin enables:
   - Automatic loading of models from schema directory, available directly in the container.
   - Support for multiple connections.
   - JSON based logging that can be routed directly to systems like logstash for insights.
-  - Migration support for MongoDB. (Native console in development)
+  - Native console for accessing routes and migrations subsystem. Now routes can be viewed and generated. Migrations can be
+    run.
 
 > The framework is still in development, and uses ejs templates for views (for now), you can freely suggest and contribute to the code, or you can send an [email] or tweet me [@ravisemwal_].
 
@@ -53,6 +54,12 @@ A console is now accessible that can allow access to migration subsystem, you ca
 
 ```sh
 $ node kyrin/console
+```
+
+You can generate your first controller by executing the following command
+
+```sh
+$ node kyrin/console routes generate mycontroller
 ```
 To view the logs in the console, install bunyan globally. Below example shows accessing development logs stored by default.
 
