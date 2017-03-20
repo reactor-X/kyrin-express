@@ -24,9 +24,9 @@ export default class MongoConnection {
                     MongoConnection.logger.kErr('Unable to connect to mongo instance. Please, check if mongo is running and configuration is correct.' + err.stack);
                 } else {
                     mongoose['info'] = { 'name': connection_name, 'string': connectionString };
-                    MongoConnection.connection = mongoose;
                 }
             });
+            MongoConnection.connection = mongoose;
         } catch (e) {
             MongoConnection.logger.kErr('Unable to establish mongo connection with connection string ' + connectionString);
         }
