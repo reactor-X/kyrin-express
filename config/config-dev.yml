@@ -4,6 +4,7 @@ application:
             binaries: ['/lib','node_modules']
             styles: ['/css','public/assets/css']
             javascripts: ['/js','public/assets/js']
+    default_log_level: info
     connections:
         logstash:
             host: localhost

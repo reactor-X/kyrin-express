@@ -10,11 +10,13 @@ export default class KLogger {
     private static logPath;
     private static logDepth;
     private static appName;
+    private static supported_min_log_levels=['trace','debug','info','warn','error','fatal'];
     constructor(mode: string, serverDirectory: string, appConfig: string) {
-        if (mode == 'dev')
-            KLogger.logDepth = 'trace';
-        else
-            KLogger.logDepth = 'info';
+        if (KLogger.supported_min_log_levels.indexOf(appConfig['default_log_level'])){
+            KLogger.logDepth=appConfig['default_log_level'];
+        }else{
+            KLogger.logDepth='info';
+        }
         this.configureAndInit(mode, serverDirectory, appConfig);
     }
     private createFileLogger() {
@@ -53,7 +55,8 @@ export default class KLogger {
                         port: connectionspec['port'],
                         max_connect_retries: 10,
                         retry_interval: 1000 * 60
-                    }).on('error', console.log)
+                    }).on('error', console.log),
+                    level: KLogger.logDepth
                 }
             ]
         });
