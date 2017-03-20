@@ -1,10 +1,10 @@
-import * as colors from 'colors/safe';
 import * as path from 'path';
 import * as fs from 'fs';
-import mongoose = require('mongoose');  //Workaround for custom promise.
+import mongoose = require('mongoose');
 import * as mkdirp from 'mkdirp';
 import AppContainer from '../../Core/ContainerLoader'; //Container to get current configuration.
 import MongoConnection from '../../ODM/MongoDB/MongoConnection';
+import TerminalMessages from '../TerminalMessages';
 
 export default class MigrationEngine {
 
@@ -26,9 +26,9 @@ export default class MigrationEngine {
     this.performAction();
   }
   private logUsageHelp() {
-    MigrationEngine.showFail('\nValid migration subsystem command missing, did you mean one of these ?');
-    MigrationEngine.showFail('migrations:generate <connection_name> [migration-name (optional)]');
-    MigrationEngine.showFail('migrations:migrate <connection_name> <direction> <migration-name>\n');
+    TerminalMessages.showFail('\nValid migration subsystem command missing, did you mean one of these ?');
+    TerminalMessages.showFail('migrations generate <connection_name> [migration-name (optional)]');
+    TerminalMessages.showFail('migrations migrate <connection_name> <direction> <migration-name>\n');
   }
 
   private performAction() {
@@ -49,12 +49,12 @@ export default class MigrationEngine {
   private generate() {
     let connection_name = this.args[1];
     if ((typeof connection_name) == 'undefined') {
-      MigrationEngine.showFail('No connection specified for migration generator.');
+      TerminalMessages.showFail('No connection specified for migration generator.');
       this.logUsageHelp();
       return;
     }
     if (this.connections.indexOf(connection_name) == -1) {
-      MigrationEngine.showFail("Couldn't find " + connection_name + " in connections configuration. (Typo? / Unregistered connection?)");
+      TerminalMessages.showFail("Couldn't find " + connection_name + " in connections configuration. (Typo? / Unregistered connection?)");
       this.logUsageHelp();
       return;
     }
@@ -76,46 +76,37 @@ export default class MigrationEngine {
       };
     }
     mkdirp(path.join(process.cwd(), 'migrations', connection_name, 'patches'), function (err) {
-      if (err) MigrationEngine.showFail('Unable to create migration directories. Please, make sure you have permissions.');
+      if (err) TerminalMessages.showFail('Unable to create migration directories. Please, make sure you have permissions.');
       //Create configuration file if not exists.
       let configData = JSON.stringify(CONFIG, null, 2);
       fs.writeFileSync(configPath, configData);
       //Generate migration 
       let timestamp = Date.now();
       let migrationName = (typeof this.args[2] == 'undefined') ? timestamp + '.js' : timestamp + '-' + this.args[2] + '.js';
-      let template = path.join(__dirname, 'template', 'migration.js');
+      let template = path.join(__dirname, 'template', 'migration.template');
       let filename = path.join(process.cwd(), 'migrations', connection_name, 'patches', migrationName);
       let data = fs.readFileSync(template);
       fs.writeFileSync(filename, data, { flag: 'w' });
-      MigrationEngine.showSuccess('Generated new migration ' + migrationName + ' for ' + connection_name + ".");
+      TerminalMessages.showSuccess('Generated new migration ' + migrationName + ' for ' + connection_name + ".");
     }.bind(this));
 
-  }
-  public static showSuccess(msg: string) {
-    console.log(colors.green(msg));
-  }
-  public static showFail(msg: string) {
-    console.log(colors.red(msg));
-  }
-  public static showWarn(msg: string) {
-    console.log(colors.yellow(msg));
   }
   private migrate() {
     let connection_name = this.args[1];
     let direction = this.args[2];
     let migration_name = this.args[3];
     if ((typeof connection_name) == 'undefined') {
-      MigrationEngine.showFail('No connection specified for migration.');
+      TerminalMessages.showFail('No connection specified for migration.');
       this.logUsageHelp();
       return;
     }
     if (this.connections.indexOf(connection_name) == -1) {
-      MigrationEngine.showFail("Couldn't find " + connection_name + " in connections configuration. (Typo? / Unregistered connection?)");
+      TerminalMessages.showFail("Couldn't find " + connection_name + " in connections configuration. (Typo? / Unregistered connection?)");
       this.logUsageHelp();
       return;
     }
     if ((typeof migration_name) == 'undefined' && direction == 'down') {
-      MigrationEngine.showFail('You must provide name of migration to rollback.');
+      TerminalMessages.showFail('You must provide name of migration to rollback.');
       return;
     }
     if (direction !== 'down') {
@@ -129,7 +120,7 @@ export default class MigrationEngine {
       CONFIG = require(path.relative(__dirname, configFilePath));
       new MigrationRunner(CONFIG, migration_name, direction, configPath, connection_name);
     } catch (ex) {
-      MigrationEngine.showFail("No migration registry exists for " + connection_name + " yet. You can create it using 'migrations create " + connection_name + "'");
+      TerminalMessages.showFail("No migration registry exists for " + connection_name + " yet. You can create it using 'migrations create " + connection_name + "'");
       return;
     }
   }
@@ -158,10 +149,10 @@ class MigrationRunner {
       name_of_migration_file = this.targetName;
       number_of_migrations = 1;
     } else if (this.direction == 'down' && (typeof (this.targetName)) === 'undefined') {
-      MigrationEngine.showFail('Migration name is mandatory while rolling back.'); //Stop down migration in case of no name specified.
+      TerminalMessages.showFail('Migration name is mandatory while rolling back.'); //Stop down migration in case of no name specified.
       return;
     }else if (this.direction=='up' && (typeof (this.targetName)) === 'undefined'){
-      MigrationEngine.showWarn('No name specified for up migration. Executing all new migrations...');
+      TerminalMessages.showWarn('No name specified for up migration. Executing all new migrations...');
     }
     this.migrations = fs.readdirSync(path.join(this.configPath, CONFIG.basepath));
 
@@ -172,7 +163,7 @@ class MigrationRunner {
       });
     }
     if (typeof name_of_migration_file !== 'undefined' && this.migrations.length == 0) {
-      MigrationEngine.showFail('\nCannot find that migration (' + name_of_migration_file + ').\n');
+      TerminalMessages.showFail('\nCannot find that migration (' + name_of_migration_file + ').\n');
       return;
     }
 
@@ -207,7 +198,7 @@ class MigrationRunner {
     try {
       return require(path.relative(__dirname, path.join(process.cwd(), 'src', 'model', 'schema', MigrationRunner.config.models[modelName]))); //Models are defined under models/schema
     } catch (ex) {
-      MigrationEngine.showFail('Unable to load model ' + modelName + '. Please, make sure it exists under schema directory and is valid.');
+      TerminalMessages.showFail('Unable to load model ' + modelName + '. Please, make sure it exists under schema directory and is valid.');
       console.log(ex.stack);
       process.exit;
     }
@@ -232,17 +223,17 @@ class MigrationRunner {
     try {
       migration_instance = require(path.join(process.cwd(), 'migrations', this.connectionName, MigrationRunner.config.basepath, migration));
     } catch (ex) {
-      MigrationEngine.showFail('Error while loading migration file ' + migration);
+      TerminalMessages.showFail('Error while loading migration file ' + migration);
       process.exit();
     }
     mongoose.Promise=Promise;
     mongoose.connect(MigrationRunner.config.connection, { server: { reconnectTries: 60 } }).catch(function (err) {
       if (err){
-        MigrationEngine.showFail('Unable to establish connection to database');
+        TerminalMessages.showFail('Unable to establish connection to database');
         return;
       }else{
       let timestamp = this.getTimeStampFromFileName(migration);
-      MigrationEngine.showSuccess('\nApplying migratsion ' + migration + ' - ' + this.direction);
+      TerminalMessages.showSuccess('\nApplying migratsion ' + migration + ' - ' + this.direction);
       migration_instance[this.direction].call({
         model: this.loadModel
       }, function () {
