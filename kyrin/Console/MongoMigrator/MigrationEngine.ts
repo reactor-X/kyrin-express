@@ -5,6 +5,7 @@ import * as mkdirp from 'mkdirp';
 import AppContainer from '../../Core/ContainerLoader'; //Container to get current configuration.
 import MongoConnection from '../../ODM/MongoDB/MongoConnection';
 import TerminalMessages from '../TerminalMessages';
+import bluebirdPromise = require("bluebird");
 
 export default class MigrationEngine {
 
@@ -226,7 +227,7 @@ class MigrationRunner {
       TerminalMessages.showFail('Error while loading migration file ' + migration);
       process.exit();
     }
-    mongoose.Promise=Promise;
+    mongoose.Promise = bluebirdPromise;
     mongoose.connect(MigrationRunner.config.connection, { server: { reconnectTries: 60 } }).catch(function (err) {
       if (err){
         TerminalMessages.showFail('Unable to establish connection to database');
