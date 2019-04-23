@@ -1,10 +1,12 @@
 import mongoose = require("mongoose");
+import bluebirdPromise = require("bluebird");
+
 export default class MongoConnection {
     private static connection;
     private static logger;
     constructor(connectionConfig, connection_name, logger) {
         MongoConnection.logger = logger;
-        mongoose.Promise = Promise;
+        mongoose.Promise = bluebirdPromise;
         mongoose.connection.on('error', function (e) {
             MongoConnection.logger.kErr('Database error : ' + e.message + '. ' + e.stack);
         });
